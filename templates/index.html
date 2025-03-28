@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriBot - Smart Farming Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">AgriBot</div>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Crops</a></li>
+            <li><a href="#">Weather</a></li>
+            <li><a href="#">Pest Control</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="hero">
+        <h1>Welcome to AgriBot</h1>
+        <p>Your Smart Farming Assistant for Crop and Weather Guidance</p>
+        <button id="chatbot-toggle">Open Chatbot</button>
+    </section>
+
+    <!-- Chatbot Sidebar -->
+    <div id="chatbot-sidebar" class="hidden">
+        <div id="chatbox-header">
+            <span>AgriBot</span>
+            <div id="chatbox-header-buttons">
+                <button id="chatbox-fullscreen-btn" class="chatbox-btn zoom-btn">⛶</button>
+                <button id="chatbox-close" class="chatbox-btn close-btn">❌</button>
+            </div>
+        </div>
+        <div id="chatbox-messages"></div>
+        <div id="chatbox-input">
+            <input type="text" id="user-input" placeholder="Ask me something...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+
+</body>
+</html>
