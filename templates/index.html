@@ -7,44 +7,129 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-
     <!-- Navigation Bar -->
-    <nav>
-        <div class="logo">AgriBot</div>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Crops</a></li>
-            <li><a href="#">Weather</a></li>
-            <li><a href="#">Pest Control</a></li>
-            <li><a href="#">Contact</a></li>
-        </ul>
-    </nav>
+    <nav class="navbar">
+        <div class="nav-left">
+          <a href="{{ url_for('home') }}" class="logo">AgriBot</a>
+          <ul class="nav-menu">
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('chatbot_page') }}">Chatbot</a></li>
+            <li><a href="{{ url_for('crops') }}">Crops</a></li>
+            <li><a href="{{ url_for('irrigation') }}">Irrigation</a></li>
+            <li><a href="{{ url_for('soil_health') }}">Soil Health</a></li>
+            <li><a href="{{ url_for('market_prices') }}">Market Prices</a></li>
+            <li><a href="{{ url_for('about') }}">About Us</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+          </ul>
+        </div>
+        <div class="nav-right">
+          <a href="{{ url_for('login') }}" class="btn login-btn">Login</a>
+          <a href="{{ url_for('signup') }}" class="btn signup-btn">Sign Up</a>
+        </div>
+      </nav>
 
-    <!-- Main Content -->
+    <!-- Hero Section -->
     <section class="hero">
         <h1>Welcome to AgriBot</h1>
         <p>Your Smart Farming Assistant for Crop and Weather Guidance</p>
-        <button id="chatbot-toggle">Open Chatbot</button>
+        <button id="chatbot-toggle" class="chatbot-toggle-btn" onclick="window.open('/chatbot', '_blank')">
+            Open Chatbot
+        </button>
     </section>
 
-    <!-- Chatbot Sidebar -->
-    <div id="chatbot-sidebar" class="hidden">
-        <div id="chatbox-header">
-            <span>AgriBot</span>
-            <div id="chatbox-header-buttons">
-                <button id="chatbox-fullscreen-btn" class="chatbox-btn zoom-btn">⛶</button>
-                <button id="chatbox-close" class="chatbox-btn close-btn">❌</button>
+    <!-- MSP Section -->
+    <section id="msp" class="msp-section" style="background-color: wheat; background-size: cover;">
+        <h2>Minimum Support Price (MSP)</h2>
+        <p>Get real-time Minimum Support Price details for various crops.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Crop</th>
+                    <th>MSP (₹ per quintal)</th>
+                    <th>Year</th>
+                </tr>
+            </thead>
+            <tbody id="msp-data">
+                <!-- Dynamic MSP Data will be inserted here using JavaScript -->
+            </tbody>
+        </table>
+    </section>
+
+    <!-- FAQ Section -->
+<section id="faq" class="py-5" style="background: linear-gradient(to right, #2980B9, #6DD5FA); color: white;">
+    <div class="container">
+      <h2 class="text-center mb-4">❓ Frequently Asked Questions</h2>
+      
+      <div class="accordion accordion-flush bg-transparent" id="faqAccordion">
+        <!-- FAQ 1 -->
+        <div class="accordion-item bg-transparent border-white">
+          <h2 class="accordion-header" id="faqHeadingOne">
+            <button class="accordion-button collapsed bg-light text-dark fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseOne">
+              What is AgriBot and how does it help farmers?
+            </button>
+          </h2>
+          <div id="faqCollapseOne" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body bg-white text-dark">
+              AgriBot is an AI-powered agriculture chatbot that helps farmers with crop suggestions, pest control methods, irrigation techniques, and real-time market prices.
             </div>
+          </div>
         </div>
-        <div id="chatbox-messages"></div>
-        <div id="chatbox-input">
-            <input type="text" id="user-input" placeholder="Ask me something...">
-            <button id="send-btn">Send</button>
+  
+        <!-- FAQ 2 -->
+        <div class="accordion-item bg-transparent border-white">
+          <h2 class="accordion-header" id="faqHeadingTwo">
+            <button class="accordion-button collapsed bg-light text-dark fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseTwo">
+              How can I get crop suggestions based on my location?
+            </button>
+          </h2>
+          <div id="faqCollapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body bg-white text-dark">
+              Simply share your location or enter it manually — the bot will fetch climate and soil details to recommend the most suitable crops for your region.
+            </div>
+          </div>
         </div>
+  
+        <!-- FAQ 3 -->
+        <div class="accordion-item bg-transparent border-white">
+          <h2 class="accordion-header" id="faqHeadingThree">
+            <button class="accordion-button collapsed bg-light text-dark fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseThree">
+              Will I get weather-based alerts or updates?
+            </button>
+          </h2>
+          <div id="faqCollapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body bg-white text-dark">
+              Yes, AgriBot uses weather APIs to provide timely suggestions and warnings based on weather forecasts, ensuring better crop planning and protection.
+            </div>
+          </div>
+        </div>
+      </div>
+  
     </div>
+  </section>
+  
 
-    <!-- JavaScript -->
-    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+    <!-- Footer -->
+    <footer style="background-color: blueviolet; background-size: cover;">
+        <p>&copy; 2025 GrowTech. All rights reserved.</p>
+        <p>Contact: <a href="mailto:deexithmsd13@gmail.com">your-email@example.com</a></p>
+        <p>Phone: +91 XXXXXXXXXX</p>
+    </footer>
 
+    <script>
+        // Fetch MSP Data from backend
+        fetch('/api/msp')
+            .then(response => response.json())
+            .then(data => {
+                const mspTable = document.getElementById('msp-data');
+                mspTable.innerHTML = data.map(msp => 
+                    `<tr>
+                        <td>${msp.crop}</td>
+                        <td>₹${msp.price}</td>
+                        <td>${msp.year}</td>
+                    </tr>`
+                ).join('');
+            })
+            .catch(error => console.error('Error fetching MSP data:', error));
+    </script>
 </body>
 </html>

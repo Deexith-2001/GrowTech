@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Irrigation Techniques | AgriBot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* Reset & Base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      background-color: #f5f9f6;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Navbar */
+    nav {
+      background-color: #2e8b57;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    nav h1 {
+      color: #fff;
+      font-size: 24px;
+    }
+
+    .menu-icon {
+      display: none;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
+
+    /* Hide menu for mobile */
+    @media (max-width: 768px) {
+      .menu-icon {
+        display: block;
+      }
+
+      nav ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: #2e8b57;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        padding: 10px 0;
+        z-index: 999;
+      }
+
+      nav ul.show {
+        display: flex;
+      }
+
+      nav ul li {
+        text-align: center;
+        padding: 10px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    /* Header */
+    header {
+      background: url('https://images.unsplash.com/photo-1586773860418-d37222d8fce3') center/cover no-repeat;
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+      position: relative;
+    }
+
+    header h2 {
+      font-size: 36px;
+      background-color: rgba(0,0,0,0.5);
+      padding: 10px 20px;
+      border-radius: 10px;
+    }
+
+    /* Close Button */
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .close-btn:hover {
+      background-color: #e60000;
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .technique {
+      margin-bottom: 30px;
+      padding: 20px;
+      background-color: #e6f2ea;
+      border-left: 6px solid #2e8b57;
+      border-radius: 8px;
+    }
+
+    .technique h3 {
+      color: #2e8b57;
+      margin-bottom: 10px;
+    }
+
+    .technique p {
+      font-size: 16px;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #2e8b57;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <h1>AgriBot</h1>
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    <ul id="nav-menu">
+      <li><a href="/">Home</a></li>
+      <li><a href="/crops">Crops</a></li>
+      <li><a href="/chatbot">Chatbot</a></li>
+      <li><a href="/irrigation">Irrigation</a></li>
+      <li><a href="/about">About Us</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Header Section -->
+  <header>
+    <h2>Irrigation Techniques</h2>
+    <button class="close-btn" onclick="window.location.href='/'">✖ Close</button>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="technique">
+      <h3>💧 Drip Irrigation</h3>
+      <p>Delivers water directly to the root zone of plants through a network of valves, pipes, tubing, and emitters. It is water-efficient and ideal for arid regions.</p>
+    </div>
+
+    <div class="technique">
+      <h3>🌦️ Sprinkler Irrigation</h3>
+      <p>Simulates natural rainfall by spraying water over crops using a system of pipes and sprinklers. Commonly used in fields with uneven terrain.</p>
+    </div>
+
+    <div class="technique">
+      <h3>🌊 Surface Irrigation</h3>
+      <p>Water flows over the soil surface by gravity. This method includes furrow, basin, and border irrigation. It is simple and widely used but less efficient.</p>
+    </div>
+
+    <div class="technique">
+      <h3>🌾 Subsurface Irrigation</h3>
+      <p>Involves applying water below the soil surface through buried pipelines or tubes. Helps in reducing evaporation and improving water use efficiency.</p>
+    </div>
+
+    <div class="technique">
+      <h3>⚙️ Manual & Traditional Methods</h3>
+      <p>Includes using buckets, watering cans, and other tools manually to irrigate small plots of land. Still used in rural farming where modern systems are unavailable.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 AgriBot | Developed for smarter farming solutions 🌱
+  </footer>
+
+  <!-- JavaScript for Menu Toggle -->
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("nav-menu");
+      menu.classList.toggle("show");
+    }
+  </script>
+</body>
+</html>

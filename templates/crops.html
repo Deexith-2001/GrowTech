@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crops - AgriBot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">AgriBot</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="crops.html">Crops</a></li>
+            <li><a href="weather.html">Weather</a></li>
+            <li><a href="pest_control.html">Pest Control</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Crops Section -->
+    <section class="crops">
+        <h1>Popular Crops</h1>
+        <div class="crop-gallery">
+            <div class="crop" onclick="showCropDetails('wheat')">
+                <img src="{{ url_for('static', filename='images/wheat.jpg') }}" alt="Wheat">
+                <p>Wheat</p>
+            </div>
+            <div class="crop" onclick="showCropDetails('rice')">
+                <img src="{{ url_for('static', filename='images/rice.jpg') }}" alt="Rice">
+                <p>Rice</p>
+            </div>
+            <div class="crop" onclick="showCropDetails('maize')">
+                <img src="{{ url_for('static', filename='images/maize.jpg') }}" alt="Maize">
+                <p>Maize</p>
+            </div>
+            <div class="crop" onclick="showCropDetails('cotton')">
+                <img src="{{ url_for('static', filename='images/cotton.jpg') }}" alt="Cotton">
+                <p>Cotton</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Crop Details Section -->
+    <section id="crop-details" class="hidden">
+        <h2 id="crop-name"></h2>
+        <p id="crop-info"></p>
+        <button onclick="hideCropDetails()">Close</button>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 GrowTech. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/crops.js') }}"></script>
+</body>
+</html>

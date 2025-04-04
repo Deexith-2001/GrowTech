@@ -27,18 +27,18 @@ app.config['MYSQL_DB'] = 'agribot'
 
 mysql = MySQL(app)
 
-# API keys
+# API Keys from .env
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 GEOCODING_API_KEY = os.getenv("GEOCODING_API_KEY")
 WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
 MSP_API_KEY = os.getenv("MSP_API_KEY")
 MSP_API_URL = os.getenv("MSP_API_URL")
 
-# Check API keys
+# Validate API keys
 if not OPENAI_API_KEY or not GEOCODING_API_KEY or not WEATHER_API_KEY:
     raise ValueError("❌ Missing API keys in .env file.")
 
-# Setup OpenAI
+# OpenAI API setup
 openai.api_key = OPENAI_API_KEY
 
 # Load NLP models
@@ -46,6 +46,7 @@ nlp = spacy.load("en_core_web_sm")
 sia = SentimentIntensityAnalyzer()
 
 # ---------------- Helper Functions ----------------
+
 def fetch_msp_data():
     try:
         url = f"{MSP_API_URL}?api-key={MSP_API_KEY}&format=json"
@@ -111,6 +112,7 @@ def get_chatbot_response(user_message, user_location):
     return get_gpt_response(user_message, user_location)
 
 # ---------------- Routes ----------------
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -150,6 +152,7 @@ def get_msp():
     return jsonify(msp_data)
 
 # ---------------- Authentication ----------------
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -174,7 +177,8 @@ def signup():
         password = request.form['password']
         hashed_pw = generate_password_hash(password)
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)", (username, email, hashed_pw))
+        cur.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
+                    (username, email, hashed_pw))
         mysql.connection.commit()
         cur.close()
         flash("Signup successful!", "success")
@@ -188,6 +192,7 @@ def logout():
     return redirect(url_for('home'))
 
 # ---------------- Other Sections ----------------
+
 @app.route('/irrigation')
 def irrigation():
     return render_template('irrigation.html')
@@ -204,6 +209,10 @@ def market_prices():
 def pestcontrol():
     return render_template('pestcontrol.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
@@ -213,5 +222,6 @@ def status():
     return jsonify({"status": "running"})
 
 # ---------------- Run App ----------------
+
 if __name__ == "__main__":
     app.run(debug=True)

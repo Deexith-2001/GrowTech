@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Soil Health | AgriBot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #3cb371, #9be15d);
+      min-height: 100vh;
+      color: #fff;
+    }
+
+    nav {
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      position: relative;
+      backdrop-filter: blur(10px);
+    }
+
+    nav h1 {
+      color: #ffffff;
+      font-size: 24px;
+    }
+
+    .menu-icon {
+      display: none;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .menu-icon {
+        display: block;
+      }
+
+      nav ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        position: absolute;
+        top: 60px;
+        left: 0;
+        padding: 10px 0;
+        z-index: 999;
+      }
+
+      nav ul.show {
+        display: flex;
+      }
+
+      nav ul li {
+        text-align: center;
+        padding: 10px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    header {
+      text-align: center;
+      padding: 50px 20px 30px;
+    }
+
+    header h2 {
+      font-size: 36px;
+      background: rgba(0, 0, 0, 0.4);
+      display: inline-block;
+      padding: 10px 25px;
+      border-radius: 10px;
+      backdrop-filter: blur(8px);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .section-box {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 30px;
+      backdrop-filter: blur(12px);
+      color: #fff;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .section-box:hover {
+      transform: scale(1.02);
+    }
+
+    .section-box h3 {
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .section-box p {
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .close-btn:hover {
+      background-color: #e60000;
+    }
+
+    .video-section iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+      border-radius: 12px;
+      margin-bottom: 25px;
+    }
+
+    .slider {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      scroll-behavior: smooth;
+      margin-bottom: 40px;
+    }
+
+    .slider img {
+      width: 300px;
+      height: 200px;
+      border-radius: 12px;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    footer {
+      background-color: rgba(0, 0, 0, 0.4);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      backdrop-filter: blur(10px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <h1>AgriBot</h1>
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    <ul id="nav-menu">
+      <li><a href="/">Home</a></li>
+      <li><a href="/crops">Crops</a></li>
+      <li><a href="/chatbot">Chatbot</a></li>
+      <li><a href="/irrigation">Irrigation</a></li>
+      <li><a href="/soil-health">Soil Health</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+    <button class="close-btn" onclick="window.location.href='/'">✖ Close</button>
+  </nav>
+
+  <!-- Header -->
+  <header>
+    <h2>🌱 Soil Health & Fertility</h2>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="section-box">
+      <h3>🌾 Importance of Soil Health</h3>
+      <p>Healthy soil retains nutrients, supports plant growth, and ensures long-term agricultural sustainability.</p>
+    </div>
+
+    <div class="section-box">
+      <h3>📹 Soil Health Videos</h3>
+      <div class="video-section">
+        <iframe src="https://www.youtube.com/embed/OgHzcWSQOa8" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/Yp6OuQF4zjI" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="section-box">
+      <h3>🖼️ Soil Image Gallery</h3>
+      <div class="slider">
+        <img src="https://cdn.pixabay.com/photo/2016/04/20/11/48/soil-1345098_1280.jpg" alt="Soil 1" />
+        <img src="https://cdn.pixabay.com/photo/2016/03/27/18/54/earth-1284221_1280.jpg" alt="Soil 2" />
+        <img src="https://cdn.pixabay.com/photo/2015/03/26/09/54/soil-690958_1280.jpg" alt="Soil 3" />
+        <img src="https://cdn.pixabay.com/photo/2017/08/02/01/01/field-2562030_1280.jpg" alt="Soil 4" />
+      </div>
+    </div>
+
+    <div class="section-box">
+      <h3>🌿 Organic Matter & Testing</h3>
+      <p>Add compost, test pH regularly, rotate crops, and maintain biodiversity to keep your soil fertile and productive.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 AgriBot | Healthy Soil, Happy Harvest 🌾
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("nav-menu").classList.toggle("show");
+    }
+  </script>
+</body>
+</html>

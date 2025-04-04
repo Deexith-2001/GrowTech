@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriBot - Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <div id="chatbot-container">
+        <div id="chatbox-header">AgriBot</div>
+        <div id="chatbox-messages"></div>
+        <div id="chatbox-input">
+            <input type="text" id="user-input" placeholder="Ask me anything...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+</body>
+</html>
+

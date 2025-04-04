@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pest Control | AgriBot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #f8f9fa;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .navbar {
+      background-color: #000;
+    }
+
+    .navbar-brand, .nav-link {
+      color: #fff !important;
+    }
+
+    h2, h5 {
+      color: #ffd700;
+    }
+
+    p {
+      color: #ccc;
+    }
+
+    .card {
+      background-color: #1c1c1c;
+      color: #f1f1f1;
+      border: none;
+    }
+
+    .card img {
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .btn-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #ff4d4d;
+      border: none;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .btn-close:hover {
+      background-color: #e60000;
+    }
+
+    .custom-close {
+  position: fixed;
+  top: 80px;  /* Moved below toggle button */
+  right: 20px;
+  background-color: #ff4d4d;
+  border: none;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  z-index: 1050; /* Higher than navbar */
+}
+
+@media (min-width: 992px) {
+  .custom-close {
+    top: 20px;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="index.html">AgriBot</a>
+      <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="crops.html">Crops</a></li>
+          <li class="nav-item"><a class="nav-link" href="soil-health.html">Soil Health</a></li>
+          <li class="nav-item"><a class="nav-link active" href="pestcontrol.html">Pest Control</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Close Button -->
+  <a href="index.html" class="btn-close custom-close">Close</a>
+
+  <!-- Content -->
+  <section class="container py-5">
+    <h2 class="text-center mb-5">🐛 Pest Control Techniques</h2>
+    <div class="row g-4">
+
+      <!-- Locust -->
+      <div class="col-md-4">
+        <div class="card shadow">
+          <img src="static/images/locust.jpg" class="card-img-top" alt="Locust">
+          <div class="card-body">
+            <h5 class="card-title">Locust</h5>
+            <p class="card-text">Spray neem oil or use biological agents like Metarhizium for natural control.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aphids -->
+      <div class="col-md-4">
+        <div class="card shadow">
+          <img src="static/images/aphid.jpg" class="card-img-top" alt="Aphids">
+          <div class="card-body">
+            <h5 class="card-title">Aphids</h5>
+            <p class="card-text">Use insecticidal soaps or release ladybugs to naturally reduce aphids.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stem Borer -->
+      <div class="col-md-4">
+        <div class="card shadow">
+          <img src="static/images/borer.jpg" class="card-img-top" alt="Stem Borer">
+          <div class="card-body">
+            <h5 class="card-title">Stem Borer</h5>
+            <p class="card-text">Deploy pheromone traps or Trichogramma parasitoids to disrupt life cycles.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

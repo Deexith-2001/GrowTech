@@ -1,10 +1,21 @@
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: url("../images/farm.jpg") no-repeat center center/cover;
-    color: black;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: radial-gradient(circle at center, 
+                #c3f2ff,   /* light sky blue */
+                #d6e4ff,   /* soft lavender blue */
+                #fde1ff,   /* baby pink */
+                #fff8dd,   /* pale yellow */
+                #e1ffe4,   /* mint green */
+                #e6e6fa);  /* lavender */
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #222;
+    margin: 15px;
+    padding: 15px;
 }
 
 /* Navbar */
@@ -23,56 +34,52 @@ nav .logo {
 nav ul {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 10px 0 0;
 }
 
 nav ul li {
     display: inline;
-    margin: 0 10px;
+    margin: 0 15px;
 }
 
 nav ul li a {
     text-decoration: none;
     color: white;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 /* Hero Section */
 .hero {
     text-align: center;
-    padding: 100px;
-    background: rgba(255, 255, 255, 0.5);
+    padding: 80px 20px;
+    background: rgba(255, 255, 255, 0.6);
 }
 
-/* About Section */
-#about-section {
-    display: none;
-    background: white;
-    padding: 20px;
-    text-align: center;
+.hero h1 {
+    font-size: 32px;
+    font-weight: bold;
 }
 
-/* Hidden class */
-.hidden {
-    display: none;
+.hero p {
+    font-size: 18px;
+    margin-bottom: 20px;
 }
 
-/* Chatbot Button */
-#chatbot-toggle {
-    position: fixed;
-    bottom: 15px;
-    right: 15px;
+.chatbot-toggle-btn {
+    position: relative;
+    margin-top: 15px;
     background: green;
     color: white;
-    padding: 12px 15px;
+    padding: 12px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
     transition: 0.3s;
-    z-index: 1000;
 }
 
-#chatbot-toggle:hover {
+.chatbot-toggle-btn:hover {
     background: darkgreen;
 }
 
@@ -81,24 +88,14 @@ nav ul li a {
     position: fixed;
     bottom: 10px;
     right: 10px;
-    width: 300px;
+    width: 350px;
     height: 400px;
     background: white;
     border-radius: 10px;
-    box-shadow: 0px 0px 10px gray;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
     display: none;
     transition: all 0.3s ease-in-out;
-    z-index: 1001;
-}
-
-/* Fullscreen Chatbot */
-.chatbox-fullscreen {
-    width: 100vw;
-    height: 100vh;
-    bottom: 0;
-    right: 0;
-    border-radius: 0;
-    z-index: 9999;
+    z-index: 1000;
 }
 
 /* Chatbot Header */
@@ -111,50 +108,26 @@ nav ul li a {
     align-items: center;
     font-size: 18px;
     font-weight: bold;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 /* Header Buttons (Zoom & Close) */
 #chatbox-header-buttons {
     display: flex;
-    gap: 8px; /* Space between buttons */
+    gap: 10px;
 }
 
-/* Common button styles */
 .chatbox-btn {
     border: none;
     background: transparent;
+    cursor: pointer;
     font-size: 18px;
-    cursor: pointer;
-    padding: 5px;
-}
-
-/* Zoom Button */
-.zoom-btn {
-    color: black;
-    background: yellow;
-    padding: 3px 8px;
-    border-radius: 3px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-}
-
-.zoom-btn:hover {
-    background: gold;
-}
-
-/* Close Button */
-.close-btn {
-    color: red;
-    font-size: 18px;
-    cursor: pointer;
-    border: none;
-    background: transparent;
 }
 
 /* Chat Messages */
 #chatbox-messages {
-    height: 320px;
+    height: 300px;
     overflow-y: auto;
     padding: 10px;
     background: #f9f9f9;
@@ -162,119 +135,101 @@ nav ul li a {
 
 /* Message Styling */
 .message {
-    padding: 8px;
     margin-bottom: 10px;
+    padding: 10px;
     border-radius: 5px;
     font-size: 14px;
 }
 
-.message strong {
-    font-weight: bold;
-}
-
 .message:nth-child(odd) {
-    background: #e0ffe0; /* Light green for user */
+    background: #e6ffe6;
 }
 
 .message:nth-child(even) {
-    background: #ffffff; /* White for bot */
+    background: #ffffff;
 }
 
 /* Chat Input Section */
 #chatbox-input {
     display: flex;
-    align-items: center; /* Aligns input and button correctly */
+    align-items: center;
     padding: 10px;
     background: #fff;
     border-top: 1px solid #ddd;
-    height: 50px; /* Fixed height */
-    box-sizing: border-box;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
 }
 
-/* Chat Input Field */
 #user-input {
     flex: 1;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 14px;
-    height: 35px; /* Ensures visibility */
-    outline: none;
 }
 
-/* Send Button */
 #send-btn {
-    width: 70px;
     background: green;
     color: white;
     border: none;
     border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 14px;
     cursor: pointer;
     margin-left: 10px;
-    font-size: 14px;
-    height: 35px; /* Matches input field */
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 #send-btn:hover {
     background: darkgreen;
 }
 
-/* RESPONSIVE DESIGN */
+/* Fullscreen Mode */
+.chatbox-fullscreen {
+    width: 100vw;
+    height: 100vh;
+    bottom: 0;
+    right: 0;
+    border-radius: 0;
+    z-index: 9999;
+}
 
-/* For screens smaller than 600px (Mobile) */
-@media screen and (max-width: 600px) {
+/* Responsive Design */
+@media (max-width: 768px) {
     #chatbot-sidebar {
-        width: 90%;  /* Make chatbot wider */
-        height: 80vh; /* Adjust height */
-        right: 5%; /* Center it */
-        bottom: 5%;
+        width: 300px;
+        height: 350px;
     }
 
-    .chatbox-fullscreen {
-        width: 100%;
-        height: 100%;
-    }
-
-    #chatbox-header {
-        font-size: 16px; /* Reduce header size */
-        padding: 8px;
-    }
-
-    #chatbox-header-buttons {
-        gap: 5px;
-    }
-
-    #chatbox-messages {
-        height: 65vh; /* Adjust chat area */
-        font-size: 14px; /* Reduce text size */
-    }
-
-    #chatbox-input {
-        flex-direction: column; /* Stack input and button */
-        padding: 5px;
+    .message {
+        font-size: 12px;
     }
 
     #user-input {
-        width: 100%; /* Full width */
-        margin-bottom: 5px;
+        font-size: 12px;
     }
 
     #send-btn {
-        width: 100%; /* Full width button */
-        padding: 10px;
+        font-size: 12px;
     }
 }
 
-/* For tablets and medium screens (600px to 1024px) */
-@media screen and (max-width: 1024px) {
+@media (max-width: 480px) {
     #chatbot-sidebar {
-        width: 350px; /* Adjust width */
-        height: 85vh;
+        width: 100%;
+        height: 100%;
+        bottom: 0;
+        right: 0;
+        border-radius: 0;
+    }
+
+    #chatbox-header {
+        font-size: 16px;
+        padding: 8px;
+    }
+
+    #user-input {
+        font-size: 14px;
+    }
+
+    #send-btn {
+        font-size: 14px;
+        padding: 8px 12px;
     }
 }

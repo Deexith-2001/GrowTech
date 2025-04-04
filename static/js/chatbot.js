@@ -1,100 +1,67 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const chatbox = document.getElementById("chatbot-sidebar");
-    const chatbotToggle = document.getElementById("chatbot-toggle");
-    const chatboxClose = document.getElementById("chatbox-close");
-    const sendBtn = document.getElementById("send-btn");
+    const chatboxMessages = document.getElementById("chatbox-messages");
     const userInput = document.getElementById("user-input");
-    const chatMessages = document.getElementById("chatbox-messages");
-    const fullscreenBtn = document.getElementById("chatbox-fullscreen-btn");
-
-    // Open Chatbot
-    if (chatbotToggle) {
-        chatbotToggle.addEventListener("click", function () {
-            chatbox.classList.add("chatbox-open");
-            chatbox.style.display = "block";
-        });
-    }
-
-    // Close Chatbot
-    if (chatboxClose) {
-        chatboxClose.addEventListener("click", function () {
-            chatbox.classList.remove("chatbox-open");
-            chatbox.classList.remove("chatbox-fullscreen"); // Exit fullscreen when closing
-            chatbox.style.display = "none";
-        });
-    }
-
-    // Toggle Fullscreen Mode
-    if (fullscreenBtn) {
-        fullscreenBtn.addEventListener("click", function () {
-            chatbox.classList.toggle("chatbox-fullscreen");
-        });
-    }
+    const sendBtn = document.getElementById("send-btn");
 
     // Function to add messages to the chatbox
     function addMessage(sender, message) {
         const msgDiv = document.createElement("div");
         msgDiv.classList.add("message");
         msgDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
-        chatMessages.appendChild(msgDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        chatboxMessages.appendChild(msgDiv);
+        chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
     }
 
-    // Function to get the user's location
-    function getLocation(callback) {
-        if (!navigator.geolocation) {
-            console.warn("Geolocation is not supported by this browser.");
-            return callback(null);
-        }
-
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const lat = position.coords.latitude;
-                const lon = position.coords.longitude;
-                callback({ lat, lon });
-            },
-            (error) => {
-                console.warn("Location access denied or unavailable. Using default location.");
-                callback(null);
-            }
-        );
-    }
-
-    // Function to send a message to the backend
+    // Function to send message to backend
     function sendMessage() {
         const userMessage = userInput.value.trim();
-        if (userMessage === "") return;
+        if (!userMessage) {
+            addMessage("Error", "⚠️ Please enter a message.");
+            return;
+        }
 
         addMessage("You", userMessage);
         userInput.value = "";
 
-        getLocation((location) => {
-            const payload = {
-                message: userMessage,
-                location: location ? `${location.lat},${location.lon}` : "Hyderabad",
-            };
-
-            fetch("/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    addMessage("AgriBot", data.response);
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                    addMessage("AgriBot", "Sorry, something went wrong. Please try again.");
-                });
+        fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: userMessage, location: "Hyderabad" })  // Default location
+        })
+        .then((response) => response.json())
+        .then((data) => addMessage("AgriBot", data.response))
+        .catch((error) => {
+            console.error("Error:", error);
+            addMessage("AgriBot", "⚠️ Unable to connect to server.");
         });
     }
 
-    // Attach event listeners if elements exist
-    if (sendBtn) sendBtn.addEventListener("click", sendMessage);
-    if (userInput) {
-        userInput.addEventListener("keypress", function (event) {
-            if (event.key === "Enter") sendMessage();
-        });
-    }
+    // Event listeners for sending messages
+    sendBtn.addEventListener("click", sendMessage);
+    userInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") sendMessage();
+    });
 });
+
+// Function to toggle chatbot visibility
+function toggleChatbot() {
+    const chatbot = document.getElementById("chatbot-sidebar");
+    if (chatbot) {
+        chatbot.style.display = (chatbot.style.display === "none" || chatbot.style.display === "") ? "block" : "none";
+    }
+}
+
+// Function to fetch MSP data
+function fetchMSPData() {
+    fetch("/api/msp")
+    .then(response => response.json())
+    .then(data => {
+        if (!Array.isArray(data)) {
+            throw new Error("Invalid data format: Expected an array");
+        }
+        data.forEach(msp => {
+            console.log(`Crop: ${msp.crop}, Price: ₹${msp.price}`);
+        });
+    })
+    .catch(error => console.error("Error fetching MSP data:", error));
+}

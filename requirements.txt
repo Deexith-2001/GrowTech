@@ -1,0 +1,11 @@
+Flask
+flask-mysqldb
+openai
+requests
+python-dotenv
+nltk
+spacy
+Werkzeug
+ 
+ python -m nltk.downloader vader_lexicon
+python -m spacy download en_core_web_sm
