@@ -1,10 +1,15 @@
-from flask import Flask, render_template
+import os
+import openai
 
-app = Flask(__name__)
+# Load key from env
+api_key = os.getenv("OPENAI_API_KEY")
+print("🔐 Loaded Key:", api_key[:12] + "********")
 
-@app.route('/')
-def home():
-    return render_template('test.html')
+openai.api_key = api_key
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# Try simple model list API (doesn't require prompt)
+try:
+    models = openai.Model.list()
+    print("✅ Success! Model count:", len(models.data))
+except Exception as e:
+    print("❌ Error:", e)

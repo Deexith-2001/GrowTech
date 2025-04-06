@@ -92,18 +92,25 @@ def analyze_sentiment(message):
 
 def get_gpt_response(user_message, user_location):
     try:
-        print(f"🔑 Using OpenAI Key: {openai.api_key[:8]}********")  # Debug
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
+        headers = {
+            "Authorization": f"Bearer {OPENAI_API_KEY}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": "gpt-3.5-turbo",
+            "messages": [
                 {"role": "system", "content": f"You are an intelligent farming assistant. The user is from {user_location}."},
                 {"role": "user", "content": user_message}
             ]
-        )
-        return response['choices'][0]['message']['content'].strip()
+        }
+        response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
+        response.raise_for_status()
+        result = response.json()
+        return result['choices'][0]['message']['content'].strip()
     except Exception as e:
         print(f"❌ OpenAI API Error: {e}")
         return "⚠️ Unable to fetch a response from AI."
+
 
 def get_chatbot_response(user_message, user_location):
     if any(keyword in user_message.lower() for keyword in ["weather", "temperature", "climate", "humidity"]):
