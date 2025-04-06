@@ -221,8 +221,6 @@ def contact():
 def status():
     return jsonify({"status": "running"})
 
-
-
 # ---------------- Run App ----------------
 
 if __name__ == "__main__":

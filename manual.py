@@ -1,20 +1,10 @@
-import os
-from dotenv import load_dotenv
+from flask import Flask, render_template
 
-# Load environment variables
-load_dotenv()
+app = Flask(__name__)
 
-# Fetch API details
-MSP_API_KEY = os.getenv("MSP_API_KEY")
-MSP_RESOURCE_ID = os.getenv("MSP_RESOURCE_ID")
-MSP_API_URL = os.getenv("MSP_API_URL")
+@app.route('/')
+def home():
+    return render_template('test.html')
 
-# Check if environment variables are loaded correctly
-if not MSP_API_KEY or not MSP_RESOURCE_ID or not MSP_API_URL:
-    raise ValueError("❌ Missing MSP API details in .env file!")
-
-# Construct API URL correctly
-MSP_FULL_URL = f"{MSP_API_URL}/{MSP_RESOURCE_ID}?api-key={MSP_API_KEY}&format=json"
-
-# Print the corrected URL
-print("✅ Corrected MSP API URL:", MSP_FULL_URL)
+if __name__ == '__main__':
+    app.run(debug=True)

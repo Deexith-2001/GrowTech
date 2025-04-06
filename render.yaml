@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: agribot
+    env: python
+    buildCommand: ""
+    startCommand: python app.py
+    envVars:
+      - key: OPENAI_API_KEY
+        value: your-openai-key-here
+      - key: WEATHER_API_KEY
+        value: your-weather-key-here
+      - key: GEOCODING_API_KEY
+        value: your-geocode-key-here
+      - key: MSP_API_KEY
+        value: your-msp-key-here
+      - key: MSP_API_URL
+        value: your-msp-api-url-here
