@@ -1,23 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriBot - Chatbot</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <meta charset="UTF-8">
+  <title>AgriBot - Chat Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100vh;
+      background: radial-gradient(circle at top left, #b7f0e8, #d0f4de, #fef9c7, #ffd6a5, #fcbad3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .top-bar {
+      width: 100%;
+      padding: 15px 20px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-bar h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .close-btn {
+      background: #ff4b5c;
+      border: none;
+      color: white;
+      padding: 8px 14px;
+      font-size: 14px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .chat-container {
+      width: 90%;
+      max-width: 600px;
+      height: 80vh;
+      background: rgba(255, 255, 255, 0.9);
+      margin-top: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .messages p {
+      margin: 10px 0;
+      padding: 10px 15px;
+      border-radius: 10px;
+      max-width: 80%;
+    }
+
+    .user {
+      background: #d1e7dd;
+      align-self: flex-end;
+    }
+
+    .bot {
+      background: #f8d7da;
+      align-self: flex-start;
+    }
+
+    .input-area {
+      display: flex;
+      padding: 10px;
+      background: #f1f1f1;
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    .input-area button {
+      padding: 10px 15px;
+      margin-left: 10px;
+      background: #20c997;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+
+  </style>
 </head>
 <body>
 
-    <div id="chatbot-container">
-        <div id="chatbox-header">AgriBot</div>
-        <div id="chatbox-messages"></div>
-        <div id="chatbox-input">
-            <input type="text" id="user-input" placeholder="Ask me anything...">
-            <button id="send-btn">Send</button>
-        </div>
-    </div>
+  <div class="top-bar">
+    <h2>AgriBot Chat</h2>
+    <button class="close-btn" onclick="window.location.href='index.html'">Close</button>
+  </div>
 
-    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+  <div class="chat-container">
+    <div class="messages" id="chatBox">
+      <!-- Chat messages will appear here -->
+    </div>
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Ask me anything about crops, weather, or soil..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const chatBox = document.getElementById('chatBox');
+    const userInput = document.getElementById('userInput');
+
+    userInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") sendMessage();
+    });
+
+    async function sendMessage() {
+      const message = userInput.value.trim();
+      if (!message) return;
+
+      // Append user message
+      chatBox.innerHTML += `<p class="user">${message}</p>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+      userInput.value = "";
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message: message })
+        });
+
+        const data = await response.json();
+        chatBox.innerHTML += `<p class="bot">${data.response}</p>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      } catch (error) {
+        console.error('Error:', error);
+        chatBox.innerHTML += `<p class="bot">⚠️ Something went wrong. Try again later.</p>`;
+      }
+    }
+  </script>
+
 </body>
 </html>
-

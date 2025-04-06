@@ -1,60 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crops - AgriBot</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <meta charset="UTF-8">
+  <title>Crops - GrowTech</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle, #e6f0ea, #cfe0d6, #b5cdb5, #9ecaa3);
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 20px;
+      background: #14532d;
+      color: white;
+      align-items: center;
+    }
+
+    .navbar h2 {
+      margin: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .container {
+      padding: 40px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    .crop-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      width: 300px;
+      margin: 20px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+      transition: 0.3s;
+    }
+
+    .crop-card:hover {
+      transform: scale(1.02);
+    }
+
+    .crop-card img {
+      width: 100%;
+      height: 200px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .crop-card h3 {
+      margin-top: 15px;
+      color: #14532d;
+    }
+
+    .crop-description {
+      color: #333;
+      margin-top: 10px;
+    }
+
+    .read-more {
+      color: #0d6efd;
+      cursor: pointer;
+      margin-top: 8px;
+      display: inline-block;
+      font-size: 14px;
+    }
+
+    .close-btn {
+      position: absolute;
+      right: 20px;
+      top: 15px;
+      background-color: crimson;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      background-color: darkred;
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Navigation Bar -->
-    <nav>
-        <div class="logo">AgriBot</div>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="crops.html">Crops</a></li>
-            <li><a href="weather.html">Weather</a></li>
-            <li><a href="pest_control.html">Pest Control</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-    </nav>
+  <div class="navbar">
+    <h2>GrowTech</h2>
+    <div class="nav-links">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('chatbot_page') }}">Chatbot</a>
+      <a href="{{ url_for('soil_health') }}">Soil Health</a>
+    </div>
+    <button class="close-btn" onclick="window.location.href='{{ url_for('home') }}'">Close</button>
+  </div>
 
-    <!-- Crops Section -->
-    <section class="crops">
-        <h1>Popular Crops</h1>
-        <div class="crop-gallery">
-            <div class="crop" onclick="showCropDetails('wheat')">
-                <img src="{{ url_for('static', filename='images/wheat.jpg') }}" alt="Wheat">
-                <p>Wheat</p>
-            </div>
-            <div class="crop" onclick="showCropDetails('rice')">
-                <img src="{{ url_for('static', filename='images/rice.jpg') }}" alt="Rice">
-                <p>Rice</p>
-            </div>
-            <div class="crop" onclick="showCropDetails('maize')">
-                <img src="{{ url_for('static', filename='images/maize.jpg') }}" alt="Maize">
-                <p>Maize</p>
-            </div>
-            <div class="crop" onclick="showCropDetails('cotton')">
-                <img src="{{ url_for('static', filename='images/cotton.jpg') }}" alt="Cotton">
-                <p>Cotton</p>
-            </div>
-        </div>
-    </section>
+  <div class="container">
 
-    <!-- Crop Details Section -->
-    <section id="crop-details" class="hidden">
-        <h2 id="crop-name"></h2>
-        <p id="crop-info"></p>
-        <button onclick="hideCropDetails()">Close</button>
-    </section>
+    <!-- Example Crop Card: Wheat -->
+    <div class="crop-card">
+      <img src="{{ url_for('static', filename='images/wheat.jpg') }}" alt="Wheat">
+      <h3>Wheat</h3>
+      <p class="crop-description">
+        Wheat is a staple crop grown across India. It thrives in cool, dry weather. <span class="more-text" style="display:none;">
+          <br><br><strong>Step-by-step Cultivation:</strong>
+          <ol>
+            <li>Plough and prepare the land during dry season.</li>
+            <li>Select high-yield wheat varieties.</li>
+            <li>Time sowing during October–November.</li>
+            <li>Use appropriate irrigation at key growth stages.</li>
+            <li>Apply fertilizers: NPK mix and compost.</li>
+            <li>Manage weeds and monitor for pests.</li>
+            <li>Harvest in March–April once grain hardens.</li>
+          </ol>
+        </span>
+        <span class="read-more" onclick="toggleReadMore(this)">Read more</span>
+      </p>
+    </div>
 
-    <footer>
-        <p>&copy; 2025 GrowTech. All rights reserved.</p>
-    </footer>
+    <!-- You can copy-paste below and replace for other crops -->
 
-    <!-- JavaScript -->
-    <script src="{{ url_for('static', filename='js/crops.js') }}"></script>
+    <div class="crop-card">
+      <img src="{{ url_for('static', filename='images/rice.jpg') }}" alt="Rice">
+      <h3>Rice</h3>
+      <p class="crop-description">
+        Rice is widely cultivated in water-rich regions. It requires standing water to grow. <span class="more-text" style="display:none;">
+          <br><br><strong>Step-by-step Cultivation:</strong>
+          <ol>
+            <li>Choose a fertile lowland field.</li>
+            <li>Plough and puddle the land with water.</li>
+            <li>Transplant seedlings from nursery after 20–30 days.</li>
+            <li>Maintain standing water throughout growth.</li>
+            <li>Fertilize during tillering and panicle formation stages.</li>
+            <li>Control pests like stem borer and leaf folder.</li>
+            <li>Harvest when grains are mature and golden yellow.</li>
+          </ol>
+        </span>
+        <span class="read-more" onclick="toggleReadMore(this)">Read more</span>
+      </p>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleReadMore(el) {
+      const moreText = el.previousElementSibling;
+      if (moreText.style.display === "none") {
+        moreText.style.display = "inline";
+        el.textContent = "Read less";
+      } else {
+        moreText.style.display = "none";
+        el.textContent = "Read more";
+      }
+    }
+  </script>
+
 </body>
 </html>
