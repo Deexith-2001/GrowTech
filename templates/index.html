@@ -13,26 +13,31 @@
 </head>
 <body>
     <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-left">
-            <a href="{{ url_for('home') }}" class="logo">AgriBot</a>
-            <ul class="nav-menu">
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('chatbot_page') }}">Chatbot</a></li>
-                <li><a href="{{ url_for('crops') }}">Crops</a></li>
-                <li><a href="{{ url_for('irrigation') }}">Irrigation</a></li>
-                <li><a href="{{ url_for('soil_health') }}">Soil Health</a></li>
-                <li><a href="{{ url_for('market_prices') }}">Market Prices</a></li>
-                <li><a href="{{ url_for('pestcontrol') }}">Pest Control</a></li>
-                <li><a href="{{ url_for('about') }}">About Us</a></li>
-            </ul>
-        </div>
-        <div class="nav-right">
-            <a href="{{ url_for('login') }}" class="btn login-btn">Login</a>
-            <a href="{{ url_for('signup') }}" class="btn signup-btn">Sign Up</a>
-        </div>
-      </nav>
-
+<nav class="navbar">
+    <div class="nav-left">
+      <a href="{{ url_for('home') }}" class="logo">AgriBot</a>
+  
+      <!-- Hamburger menu button (mobile only) -->
+      <button class="menu-toggle" id="menu-toggle">&#9776;</button>
+  
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="{{ url_for('home') }}">Home</a></li>
+        <li><a href="{{ url_for('chatbot_page') }}">Chatbot</a></li>
+        <li><a href="{{ url_for('crops') }}">Crops</a></li>
+        <li><a href="{{ url_for('irrigation') }}">Irrigation</a></li>
+        <li><a href="{{ url_for('soil_health') }}">Soil Health</a></li>
+        <li><a href="{{ url_for('market_prices') }}">Market Prices</a></li>
+        <li><a href="{{ url_for('pestcontrol') }}">Pest Control</a></li>
+        <li><a href="{{ url_for('about') }}">About Us</a></li>
+      </ul>
+    </div>
+  
+    <div class="nav-right">
+      <a href="{{ url_for('login') }}" class="btn login-btn">Login</a>
+      <a href="{{ url_for('signup') }}" class="btn signup-btn">Sign Up</a>
+    </div>
+  </nav>
+  
     <!-- Hero Section -->
     <section class="hero text-center">
         <h1>Welcome to AgriBot</h1>
@@ -65,10 +70,9 @@
     </section>
 
     <!-- FAQ Section -->
-<<<<<<< HEAD
 <section id="faq" class="py-5" style="background: linear-gradient(to right, #2980B9, #6DD5FA); color: white;">
     <div class="container">
-      <h2 class="text-center mb-4">❓ Frequently Asked Questions</h2>
+        <h2 class="text-center mb-4">❓ Frequently Asked Questions</h2>
       
       <div class="accordion accordion-flush bg-transparent" id="faqAccordion">
         <!-- FAQ 1 -->
@@ -81,7 +85,7 @@
           <div id="faqCollapseOne" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
             <div class="accordion-body bg-white text-dark">
               AgriBot is an AI-powered agriculture chatbot that helps farmers with crop suggestions, pest control methods, irrigation techniques, and real-time market prices.
-=======
+
     <section id="faq" class="py-5" style="background: linear-gradient(to right, #2980B9, #6DD5FA); color: white;">
         <div class="container">
             <h2 class="text-center mb-4">❓ Frequently Asked Questions</h2>
@@ -126,7 +130,7 @@
                     </div>
                 </div>
 
->>>>>>> 20c2137 (Updated project with fixed app.py, index.html, and requirements.txt)
+
             </div>
           </div>
         </div>
@@ -167,7 +171,6 @@
     <!-- Footer -->
     <footer class="text-center text-white py-4" style="background-color: blueviolet;">
         <p>&copy; 2025 GrowTech. All rights reserved.</p>
-<<<<<<< HEAD
         <p>Contact: <a href="mailto:deexithmsd13@gmail.com">your-email@example.com</a></p>
         <p>Phone: +91 XXXXXXXXXX</p>
     </footer>
@@ -188,26 +191,24 @@
             })
             .catch(error => console.error('Error fetching MSP data:', error));
     </script>
-=======
         <p>Contact: <a href="mailto:deexithmsd13@gmail.com" class="text-white">deexithmsd13@gmail.com</a></p>
         <p>Phone: <a href="tel:+91XXXXXXXXXX" class="text-white">+91 XXXXXXXXXX</a></p>
     </footer>
 
     <!-- Chatbot Toggle Script -->
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const chatbotToggle = document.getElementById("chatbot-toggle");
-            if (chatbotToggle) {
-                chatbotToggle.addEventListener("click", function () {
-                    const chatbotUrl = this.getAttribute("data-chatbot-url");
-                    window.open(chatbotUrl, "_blank");
-                });
-            }
+      document.addEventListener("DOMContentLoaded", function () {
+        const menuToggle = document.getElementById("menu-toggle");
+        const navMenu = document.getElementById("nav-menu");
+    
+        menuToggle.addEventListener("click", () => {
+          navMenu.classList.toggle("show");
         });
-    </script>
+      });
+    </script>    
 
     <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
->>>>>>> 20c2137 (Updated project with fixed app.py, index.html, and requirements.txt)
+
 </body>
 </html>

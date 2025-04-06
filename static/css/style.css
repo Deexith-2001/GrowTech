@@ -295,3 +295,41 @@ footer {
         font-size: 28px;
     }
 }
+/* Hamburger Menu Button */
+.menu-toggle {
+    display: none;
+    font-size: 28px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  /* Mobile Styles */
+  @media (max-width: 768px) {
+    .menu-toggle {
+      display: block;
+    }
+  
+    .nav-menu {
+      display: none;
+      flex-direction: column;
+      background-color: #4CAF50;
+      width: 100%;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      z-index: 1000;
+    }
+  
+    .nav-menu.show {
+      display: flex;
+    }
+  
+    .nav-menu li {
+      margin: 10px 0;
+      text-align: center;
+    }
+  }
+  
