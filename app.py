@@ -12,7 +12,7 @@ import spacy
 nltk.download('vader_lexicon')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-# Load environment variables
+# Load environment variables (for local dev only)
 load_dotenv()
 
 # Flask app config
@@ -27,18 +27,16 @@ app.config['MYSQL_DB'] = 'agribot'
 
 mysql = MySQL(app)
 
-# API Keys from .env
+# API Keys from environment (Render will inject these)
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 GEOCODING_API_KEY = os.getenv("GEOCODING_API_KEY")
 WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
 MSP_API_KEY = os.getenv("MSP_API_KEY")
 MSP_API_URL = os.getenv("MSP_API_URL")
 
-# Validate API keys
-if not OPENAI_API_KEY or not GEOCODING_API_KEY or not WEATHER_API_KEY:
-    raise ValueError("❌ Missing API keys in .env file.")
-
-# OpenAI API setup
+# Setup OpenAI
+if not OPENAI_API_KEY:
+    raise ValueError("Missing OpenAI API Key!")
 openai.api_key = OPENAI_API_KEY
 
 # Load NLP models
@@ -53,10 +51,10 @@ def fetch_msp_data():
         response = requests.get(url)
         response.raise_for_status()
         data = response.json()
-        return data.get("records", "⚠️ No MSP data available.")
-    except requests.RequestException as e:
+        return data.get("records", [])
+    except Exception as e:
         print(f"❌ Error fetching MSP data: {e}")
-        return "⚠️ Unable to fetch MSP data."
+        return []
 
 def get_location_name(lat, lon):
     try:
@@ -65,7 +63,7 @@ def get_location_name(lat, lon):
         response.raise_for_status()
         result = response.json()
         return result["results"][0]["formatted_address"] if result.get("results") else "Unknown Location"
-    except requests.RequestException as e:
+    except Exception as e:
         print(f"❌ Error fetching location: {e}")
         return "Location Error"
 
@@ -80,7 +78,7 @@ def get_weather_info(location):
             temperature = data["main"]["temp"]
             return f"🌦 The weather in {location} is {weather} with a temperature of {temperature}°C."
         return "⚠️ Weather data not available."
-    except requests.RequestException as e:
+    except Exception as e:
         print(f"❌ Error fetching weather: {e}")
         return "⚠️ Error fetching weather."
 
@@ -94,6 +92,7 @@ def analyze_sentiment(message):
 
 def get_gpt_response(user_message, user_location):
     try:
+        print(f"🔑 Using OpenAI Key: {openai.api_key[:8]}********")  # Debug
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
