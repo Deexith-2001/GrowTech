@@ -8,11 +8,7 @@ instance/
 *.log
 .env
 .env
-<<<<<<< HEAD
-<<<<<<< HEAD
 .env
-=======
->>>>>>> 85b953b (Added .gitignore to protect API keys)
-=======
 .env
->>>>>>> 51b7b8a (Added .gitignore to protect API keys)
+.env
+.env
