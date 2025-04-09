@@ -7,13 +7,24 @@ from dotenv import load_dotenv
 import openai
 import nltk
 import spacy
+import logging
 
 # Initialize NLP
 nltk.download('vader_lexicon')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-# Load environment variables (for local dev only)
+# Load environment variables
 load_dotenv()
+
+# Load and set OpenAI key
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+if not OPENAI_API_KEY:
+    raise ValueError("\u274c Missing OpenAI API Key!")
+openai.api_key = OPENAI_API_KEY
+
+# Logging
+logging.basicConfig(level=logging.INFO)
+logging.info("OpenAI key loaded successfully.")
 
 # Flask app config
 app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -27,33 +38,45 @@ app.config['MYSQL_DB'] = 'agribot'
 
 mysql = MySQL(app)
 
-# API Keys from environment (Render will inject these)
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+# Other API keys
 GEOCODING_API_KEY = os.getenv("GEOCODING_API_KEY")
 WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
 MSP_API_KEY = os.getenv("MSP_API_KEY")
 MSP_API_URL = os.getenv("MSP_API_URL")
 
-# Setup OpenAI
-if not OPENAI_API_KEY:
-    raise ValueError("Missing OpenAI API Key!")
-openai.api_key = OPENAI_API_KEY
-
-# Load NLP models
+# Load NLP tools
 nlp = spacy.load("en_core_web_sm")
 sia = SentimentIntensityAnalyzer()
 
 # ---------------- Helper Functions ----------------
+
+def translate_text(text, source_lang, target_lang):
+    if not text or source_lang == target_lang:
+        return text
+    try:
+        url = "https://libretranslate.de/translate"
+        payload = {
+            "q": text,
+            "source": source_lang,
+            "target": target_lang,
+            "format": "text"
+        }
+        headers = {"Content-Type": "application/json"}
+        response = requests.post(url, json=payload, timeout=10)
+        response.raise_for_status()
+        return response.json().get("translatedText", text)
+    except Exception as e:
+        print(f"\u274c Translation error: {e}")
+        return text
 
 def fetch_msp_data():
     try:
         url = f"{MSP_API_URL}?api-key={MSP_API_KEY}&format=json"
         response = requests.get(url)
         response.raise_for_status()
-        data = response.json()
-        return data.get("records", [])
+        return response.json().get("records", [])
     except Exception as e:
-        print(f"❌ Error fetching MSP data: {e}")
+        print(f"\u274c Error fetching MSP data: {e}")
         return []
 
 def get_location_name(lat, lon):
@@ -64,7 +87,7 @@ def get_location_name(lat, lon):
         result = response.json()
         return result["results"][0]["formatted_address"] if result.get("results") else "Unknown Location"
     except Exception as e:
-        print(f"❌ Error fetching location: {e}")
+        print(f"\u274c Error fetching location: {e}")
         return "Location Error"
 
 def get_weather_info(location):
@@ -76,11 +99,11 @@ def get_weather_info(location):
         if data.get("cod") == 200:
             weather = data["weather"][0]["description"].capitalize()
             temperature = data["main"]["temp"]
-            return f"🌦 The weather in {location} is {weather} with a temperature of {temperature}°C."
-        return "⚠️ Weather data not available."
+            return f"\ud83c\udf26 The weather in {location} is {weather} with a temperature of {temperature}\u00b0C."
+        return "\u26a0\ufe0f Weather data not available."
     except Exception as e:
-        print(f"❌ Error fetching weather: {e}")
-        return "⚠️ Error fetching weather."
+        print(f"\u274c Error fetching weather: {e}")
+        return "\u26a0\ufe0f Error fetching weather."
 
 def analyze_sentiment(message):
     scores = sia.polarity_scores(message)
@@ -92,25 +115,17 @@ def analyze_sentiment(message):
 
 def get_gpt_response(user_message, user_location):
     try:
-        headers = {
-            "Authorization": f"Bearer {OPENAI_API_KEY}",
-            "Content-Type": "application/json"
-        }
-        payload = {
-            "model": "gpt-3.5-turbo",
-            "messages": [
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
                 {"role": "system", "content": f"You are an intelligent farming assistant. The user is from {user_location}."},
                 {"role": "user", "content": user_message}
             ]
-        }
-        response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
-        response.raise_for_status()
-        result = response.json()
-        return result['choices'][0]['message']['content'].strip()
+        )
+        return response['choices'][0]['message']['content'].strip()
     except Exception as e:
-        print(f"❌ OpenAI API Error: {e}")
-        return "⚠️ Unable to fetch a response from AI."
-
+        print(f"\u274c OpenAI API Error: {e}")
+        return "\u26a0\ufe0f Unable to fetch a response from AI."
 
 def get_chatbot_response(user_message, user_location):
     if any(keyword in user_message.lower() for keyword in ["weather", "temperature", "climate", "humidity"]):
@@ -136,21 +151,37 @@ def chat():
     try:
         data = request.get_json()
         user_message = data.get("message", "").strip()
-        user_location = data.get("location", "Hyderabad")
+        selected_lang = data.get("language", "en")
+        manual_location = data.get("location", "").strip()
         lat = data.get("latitude")
         lon = data.get("longitude")
 
-        if lat and lon:
+        if manual_location:
+            user_location = manual_location
+        elif lat and lon:
             user_location = get_location_name(lat, lon)
+        else:
+            user_location = "Hyderabad"
 
         if not user_message:
-            return jsonify({"response": "⚠️ Your message cannot be empty."}), 400
+            return jsonify({"response": "\u26a0\ufe0f Your message cannot be empty."}), 400
 
-        response = get_chatbot_response(user_message, user_location)
-        return jsonify({"response": response})
+        if selected_lang != "en":
+            user_message_en = translate_text(user_message, selected_lang, "en")
+        else:
+            user_message_en = user_message
+
+        chatbot_response_en = get_chatbot_response(user_message_en, user_location)
+
+        if selected_lang != "en":
+            final_response = translate_text(chatbot_response_en, "en", selected_lang)
+        else:
+            final_response = chatbot_response_en
+
+        return jsonify({"response": final_response})
     except Exception as e:
-        print(f"❌ Error processing chat: {e}")
-        return jsonify({"response": "⚠️ Internal server error."}), 500
+        print(f"\u274c Error processing chat: {e}")
+        return jsonify({"response": "\u26a0\ufe0f Internal server error."}), 500
 
 @app.route('/api/msp')
 def get_msp():
@@ -197,7 +228,7 @@ def logout():
     flash('Logged out successfully!', 'info')
     return redirect(url_for('home'))
 
-# ---------------- Other Sections ----------------
+# ---------------- Other Pages ----------------
 
 @app.route('/irrigation')
 def irrigation():
@@ -223,11 +254,16 @@ def about():
 def contact():
     return render_template('contact.html')
 
+@app.route("/api/notify", methods=["POST"])
+def notify():
+    data = request.get_json()
+    title = data.get("title", "AgriBot Notification")
+    message = data.get("message", "")
+    return jsonify({"status": "success", "message": "Notification sent."})
+
 @app.route('/status')
 def status():
     return jsonify({"status": "running"})
-
-# ---------------- Run App ----------------
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -6,15 +6,38 @@ document.addEventListener("DOMContentLoaded", function () {
     const chatbotToggle = document.getElementById("chatbot-toggle");
     const chatbotClose = document.getElementById("chatbot-close");
     const fullscreenBtn = document.getElementById("chatbot-fullscreen");
+    const langSelect = document.getElementById("language-select");
+    let selectedLang = "en";
 
-    // Escape HTML for safety
+    // 🔔 Request notification permission + welcome message
+    if ("Notification" in window) {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission().then(permission => {
+                console.log("🔔 Notification permission:", permission);
+            });
+        }
+
+        // 🎉 Welcome notification (optional)
+        setTimeout(() => {
+            triggerNotification("🌾 Welcome to AgriBot!", "Ask about crops, weather, pests or soil!");
+        }, 3000);
+    }
+
+    // 🌐 Update selected language
+    if (langSelect) {
+        langSelect.addEventListener("change", () => {
+            selectedLang = langSelect.value;
+        });
+    }
+
+    // 🛡 Escape HTML
     function escapeHTML(text) {
         const div = document.createElement("div");
         div.innerText = text;
         return div.innerHTML;
     }
 
-    // Add chat message
+    // 💬 Add chat message to window
     function addMessage(sender, message) {
         const msgDiv = document.createElement("div");
         msgDiv.classList.add("message");
@@ -23,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
         chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
     }
 
-    // Get user location
+    // 📍 Get user location
     function getLocation(callback) {
         if (!navigator.geolocation) {
             console.warn("Geolocation not supported.");
@@ -37,14 +60,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     lon: position.coords.longitude,
                 });
             },
-            (error) => {
+            () => {
                 console.warn("Location access denied or unavailable.");
                 callback(null);
             }
         );
     }
 
-    // Send message to backend
+    // 🚀 Send message to backend
     function sendMessage() {
         const userMessage = userInput.value.trim();
         if (!userMessage) {
@@ -62,10 +85,11 @@ document.addEventListener("DOMContentLoaded", function () {
         chatboxMessages.appendChild(loadingMessage);
         chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
 
-        // Get location and send payload
+        // 🌍 Send with location data
         getLocation((location) => {
             const payload = {
                 message: userMessage,
+                language: selectedLang || "en",
                 location: location ? `${location.lat},${location.lon}` : "Hyderabad",
                 latitude: location ? location.lat : null,
                 longitude: location ? location.lon : null,
@@ -81,6 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     chatboxMessages.removeChild(loadingMessage);
                     if (data.response) {
                         addMessage("AgriBot", data.response);
+                        triggerNotification("🌱 AgriBot", data.response);  // 🔔 Notify response
                     } else {
                         addMessage("AgriBot", "⚠️ Sorry, I didn’t understand that.");
                     }
@@ -96,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Button and key events
+    // ⌨️ Button and key events
     if (sendBtn) sendBtn.addEventListener("click", sendMessage);
     if (userInput) {
         userInput.addEventListener("keypress", (event) => {
@@ -104,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Chatbot toggle button
+    // 📱 Chatbot toggle
     if (chatbotToggle) {
         chatbotToggle.addEventListener("click", () => {
             chatbox.classList.add("chatbox-open");
@@ -112,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Chatbot close button
+    // ❌ Close chatbot
     if (chatbotClose) {
         chatbotClose.addEventListener("click", () => {
             chatbox.classList.remove("chatbox-open", "chatbox-fullscreen");
@@ -120,7 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Fullscreen toggle
+    // 🔲 Fullscreen toggle
     if (fullscreenBtn) {
         fullscreenBtn.addEventListener("click", () => {
             chatbox.classList.toggle("chatbox-fullscreen");
@@ -128,27 +153,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// Toggle chatbot sidebar (optional button function)
-function toggleChatbot() {
-    const chatbot = document.getElementById("chatbot-sidebar");
-    if (chatbot) {
-        chatbot.style.display = (chatbot.style.display === "none" || chatbot.style.display === "") ? "block" : "none";
-    }
-}
-
-// Fetch Minimum Support Price (MSP) data
-function fetchMSPData() {
-    fetch("/api/msp")
-        .then(response => response.json())
-        .then(data => {
-            if (!Array.isArray(data)) {
-                throw new Error("Invalid data format: Expected an array.");
-            }
-            data.forEach(msp => {
-                console.log(`Crop: ${msp.crop}, Price: ₹${msp.price}`);
-            });
-        })
-        .catch(error => {
-            console.error("Error fetching MSP data:", error);
+// 🔔 Trigger system notification
+function triggerNotification(title, message) {
+    if ("Notification" in window && Notification.permission === "granted") {
+        new Notification(title, {
+            body: message,
+            icon: "/static/images/agribot-icon.png", // Customize as needed
         });
+    }
 }

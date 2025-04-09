@@ -1,15 +1,22 @@
+from dotenv import load_dotenv
 import os
 import openai
 
-# Load key from env
-api_key = os.getenv("OPENAI_API_KEY")
-print("🔐 Loaded Key:", api_key[:12] + "********")
+load_dotenv()
 
-openai.api_key = api_key
+key = os.getenv("OPENAI_API_KEY")
+print("📦 DEBUG Key:", key[:12] + "********")
 
-# Try simple model list API (doesn't require prompt)
+openai.api_key = key
+
 try:
-    models = openai.Model.list()
-    print("✅ Success! Model count:", len(models.data))
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "Tell me something about farming."}
+        ]
+    )
+    print("✅ Response:", response.choices[0].message.content.strip())
 except Exception as e:
     print("❌ Error:", e)
