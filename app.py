@@ -13,8 +13,11 @@ import logging
 nltk.download('vader_lexicon')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-# Load environment variables
-load_dotenv()
+# Load environment variables (with override)
+load_dotenv(override=True)
+
+# DEBUG: Print key prefix for confirmation
+print("📦 DEBUG Key:", os.getenv("OPENAI_API_KEY")[:12] + "********")
 
 # Load and set OpenAI key
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -66,7 +69,7 @@ def translate_text(text, source_lang, target_lang):
         response.raise_for_status()
         return response.json().get("translatedText", text)
     except Exception as e:
-        print(f"\u274c Translation error: {e}")
+        print(f"❌ Translation error: {e}")
         return text
 
 def fetch_msp_data():
@@ -76,7 +79,7 @@ def fetch_msp_data():
         response.raise_for_status()
         return response.json().get("records", [])
     except Exception as e:
-        print(f"\u274c Error fetching MSP data: {e}")
+        print(f"❌ Error fetching MSP data: {e}")
         return []
 
 def get_location_name(lat, lon):
@@ -87,7 +90,7 @@ def get_location_name(lat, lon):
         result = response.json()
         return result["results"][0]["formatted_address"] if result.get("results") else "Unknown Location"
     except Exception as e:
-        print(f"\u274c Error fetching location: {e}")
+        print(f"❌ Error fetching location: {e}")
         return "Location Error"
 
 def get_weather_info(location):
@@ -99,11 +102,11 @@ def get_weather_info(location):
         if data.get("cod") == 200:
             weather = data["weather"][0]["description"].capitalize()
             temperature = data["main"]["temp"]
-            return f"\ud83c\udf26 The weather in {location} is {weather} with a temperature of {temperature}\u00b0C."
-        return "\u26a0\ufe0f Weather data not available."
+            return f"🌦 The weather in {location} is {weather} with a temperature of {temperature}°C."
+        return "⚠️ Weather data not available."
     except Exception as e:
-        print(f"\u274c Error fetching weather: {e}")
-        return "\u26a0\ufe0f Error fetching weather."
+        print(f"❌ Error fetching weather: {e}")
+        return "⚠️ Error fetching weather."
 
 def analyze_sentiment(message):
     scores = sia.polarity_scores(message)
@@ -124,8 +127,8 @@ def get_gpt_response(user_message, user_location):
         )
         return response['choices'][0]['message']['content'].strip()
     except Exception as e:
-        print(f"\u274c OpenAI API Error: {e}")
-        return "\u26a0\ufe0f Unable to fetch a response from AI."
+        print(f"❌ OpenAI API Error: {e}")
+        return "⚠️ Unable to fetch a response from AI."
 
 def get_chatbot_response(user_message, user_location):
     if any(keyword in user_message.lower() for keyword in ["weather", "temperature", "climate", "humidity"]):
@@ -164,7 +167,7 @@ def chat():
             user_location = "Hyderabad"
 
         if not user_message:
-            return jsonify({"response": "\u26a0\ufe0f Your message cannot be empty."}), 400
+            return jsonify({"response": "⚠️ Your message cannot be empty."}), 400
 
         if selected_lang != "en":
             user_message_en = translate_text(user_message, selected_lang, "en")
@@ -180,8 +183,8 @@ def chat():
 
         return jsonify({"response": final_response})
     except Exception as e:
-        print(f"\u274c Error processing chat: {e}")
-        return jsonify({"response": "\u26a0\ufe0f Internal server error."}), 500
+        print(f"❌ Error processing chat: {e}")
+        return jsonify({"response": "⚠️ Internal server error."}), 500
 
 @app.route('/api/msp')
 def get_msp():
