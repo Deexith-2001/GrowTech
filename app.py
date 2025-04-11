@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for, s
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
-import openai
+from openai import OpenAI
 import nltk
 import spacy
 import logging
@@ -20,10 +20,7 @@ load_dotenv(override=True)
 print("📦 DEBUG Key:", os.getenv("OPENAI_API_KEY")[:12] + "********")
 
 # Load and set OpenAI key
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-if not OPENAI_API_KEY:
-    raise ValueError("\u274c Missing OpenAI API Key!")
-openai.api_key = OPENAI_API_KEY
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Logging
 logging.basicConfig(level=logging.INFO)
@@ -118,14 +115,14 @@ def analyze_sentiment(message):
 
 def get_gpt_response(user_message, user_location):
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": f"You are an intelligent farming assistant. The user is from {user_location}."},
                 {"role": "user", "content": user_message}
             ]
         )
-        return response['choices'][0]['message']['content'].strip()
+        return response.choices[0].message.content.strip()
     except Exception as e:
         print(f"❌ OpenAI API Error: {e}")
         return "⚠️ Unable to fetch a response from AI."
